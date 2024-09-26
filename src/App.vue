@@ -42,12 +42,22 @@ const handleFileChange = (event) => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-[#bf9107] to-[#fed665] relative">
+  <div class="h-screen bg-gradient-to-br from-[#bf9107] to-[#fed665] relative overflow-hidden">
     <!-- Container for Nav or Header -->
     <nav class="w-full flex items-center py-4 px-6">
       <!-- Venti Text (Logo) -->
       <h1 class="text-2xl font-bold text-[#FFD700]">Venti</h1> <!-- Gold text color -->
     </nav>
+
+
+    <div class="flex items-center justify-center h-full">
+      <!-- Your GIF -->
+      <img 
+        src="https://media.tenor.com/aj2m5lTme9cAAAAM/darkville-rpg.gif" 
+        alt="Centered GIF"
+        class="w-auto h-auto -mt-20"
+      />
+    </div>
 
     <!-- Music Player positioned at the bottom-center -->
     <div class="absolute bottom-0 left-0 w-full">
@@ -76,3 +86,4 @@ const handleFileChange = (event) => {
     </div>
   </div>
 </template>
+
