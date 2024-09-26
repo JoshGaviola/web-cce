@@ -4,17 +4,10 @@ import { ref, reactive, onMounted } from 'vue';
 const audio = ref(null);
 const isPlaying = ref(false);
 const currentTime = ref(0);
-
-const tracks = reactive([
-  { title: 'Song One', artist: 'Artist One', url: '/assets/song1.mp3' },
-  { title: 'Song Two', artist: 'Artist Two', url: '/assets/song2.mp3' }
-]);
-
-const currentTrackIndex = ref(0);
-const currentTrack = tracks[currentTrackIndex.value];
+const currentTrack = ref({ title: 'Song One', artist: 'Artist One', url: '/assets/song1.mp3' });
 
 onMounted(() => {
-  audio.value.src = currentTrack.url;
+  audio.value.src = currentTrack.value.url;
 });
 
 const togglePlay = () => {
@@ -35,26 +28,18 @@ const seek = (event) => {
   audio.value.currentTime = (percent / 100) * audio.value.duration;
 };
 
-const nextTrack = () => {
-  currentTrackIndex.value = (currentTrackIndex.value + 1) % tracks.length;
-  loadTrack();
+const handleFileChange = (event) => {
+  const file = event.target.files[0];
+  if (file && file.type.startsWith('audio')) {
+    const fileURL = URL.createObjectURL(file);
+    currentTrack.value = { title: file.name, artist: 'Unknown Artist', url: fileURL };
+    audio.value.src = fileURL;
+    audio.value.play();
+    isPlaying.value = true;
+  }
 };
 
-const prevTrack = () => {
-  currentTrackIndex.value = (currentTrackIndex.value - 1 + tracks.length) % tracks.length;
-  loadTrack();
-};
-
-const loadTrack = () => {
-  currentTrack.value = tracks[currentTrackIndex.value];
-  audio.value.src = currentTrack.value.url;
-  audio.value.play();
-  isPlaying.value = true;
-};
 </script>
-
-
-
 
 <template>
   <div class="min-h-screen bg-gradient-to-br from-[#bf9107] to-[#fed665] relative">
@@ -65,27 +50,29 @@ const loadTrack = () => {
     </nav>
 
     <!-- Music Player positioned at the bottom-center -->
-  <div class="absolute bottom-0 left-0 w-full">
-    <div class="player bg-yellow-100 text-yellow-300 p-4 rounded-md max-w-5xl mx-auto"> <!-- Max width added to maintain content's width -->
-      <div class="track-info mb-4">
-        <h2 class="text-2xl">{{ currentTrack.title }}</h2>
-        <p class="text-sm">{{ currentTrack.artist }}</p>
-      </div>
-      
-      <audio ref="audio" @timeupdate="updateProgress" @ended="nextTrack"></audio>
+    <div class="absolute bottom-0 left-0 w-full">
+      <div class="player bg-yellow-100 text-yellow-300 p-4 rounded-md max-w-5xl mx-auto"> <!-- Max width added to maintain content's width -->
+        <div class="track-info mb-4">
+          <h2 class="text-2xl">{{ currentTrack.title }}</h2>
+          <p class="text-sm">{{ currentTrack.artist }}</p>
+        </div>
+        
+        <audio ref="audio" @timeupdate="updateProgress"></audio>
 
-      <div class="controls flex justify-center items-center space-x-4 mt-4">
-        <button @click="prevTrack">⏮️</button>
-        <button @click="togglePlay">{{ isPlaying ? '⏸️' : '▶️' }}</button>
-        <button @click="nextTrack">⏭️</button>
+        <div class="controls flex justify-center items-center space-x-4 mt-4">
+          <button @click="prevTrack">⏮️</button>
+          <button @click="togglePlay">{{ isPlaying ? '⏸️' : '▶️' }}</button>
+          <button @click="nextTrack">⏭️</button>
+          <button @click="$refs.fileInput.click()">🔍 Search File</button>
+        </div>
+
+        <div class="progress-bar mt-4">
+          <input type="range" v-model="currentTime" @input="seek" max="100" class="w-full">
+        </div>
       </div>
 
-      <div class="progress-bar mt-4">
-        <input type="range" v-model="currentTime" @input="seek" max="100" class="w-full">
-      </div>
+      <!-- Hidden File Input -->
+      <input ref="fileInput" type="file" accept="audio/*" class="hidden" @change="handleFileChange">
     </div>
   </div>
-</div>
-
 </template>
-    
