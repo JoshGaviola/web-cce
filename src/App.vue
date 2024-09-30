@@ -48,7 +48,7 @@ const handleFileChange = (event) => {
       <!-- Venti Text (Logo) -->
       <h1 class="text-2xl font-bold text-[#FFD700]">Venti</h1> <!-- Gold text color -->
     </nav>
-    <div class="flex flex-col items-center justify-center h-full">
+    <div class="-mt-40 flex flex-col items-center justify-center h-full">
       <!-- Added text above the GIF -->
       <h2 class="text-2xl font-bold text-white mb-20">Me on my way home:</h2>
       <!-- Your GIF -->
