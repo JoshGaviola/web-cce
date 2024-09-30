@@ -12,5 +12,5 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   }, 
-  base: '/your-repo-name/' // Set the base URL to your GitHub repo name
+  base: '/web-cce/' // Set the base URL to your GitHub repo name
 })
