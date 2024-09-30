@@ -11,5 +11,6 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
-  },  // Set the base URL to your GitHub repo name
+  }, 
+  base: '/your-repo-name/' // Set the base URL to your GitHub repo name
 })
